@@ -11,21 +11,14 @@ ARG SONAR_HOME=/opt/sonarqube-${SONAR_VERSION}
 ARG GOSU_VERSION=1.11
 ARG GOSU_ARCH="amd64"
 
-ARG SONARQUBE_WEB_HOST="0.0.0.0"
-ARG SONARQUBE_WEB_PORT=9000
-ARG SONARQUBE_WEB_CONTEXT="/"
-
-ARG SONARQUBE_JDBC_USERNAME="sonar"
-ARG SONARQUBE_JDBC_PASSWORD="sonar"
-ARG SONARQUBE_JDBC_URL="jdbc:postgresql://localhost:5432/sonar"
-
 ARG SONARQUBE_LOG_LEVEL="INFO"
-ARG SONARQUBE_WEB_JVM_OPTS="-Xmx512m -Xms128m"
 ARG SONARQUBE_SEARCH_JVM_OPTS="-Xms512m -Xmx512m"
 ARG SONARQUBE_CE_JVM_OPTS="-Xmx512m -Xms128m"
 
 ENV \
-    SONARQUBE_HOME=${SONAR_HOME}
+    SONARQUBE_VERSION=${SONAR_VERSION} \
+    SONARQUBE_HOME=${SONAR_HOME} \
+    SONARQUBE_WEB_JVM_OPTS="-Xmx512m -Xms128m"
     
 
 # Download and install common packages
@@ -78,18 +71,19 @@ RUN set -x \
     && curl -o sonar-ansible-extras-plugin-2.2.0.jar -fSL "https://github.com/sbaudoin/sonar-ansible/releases/download/v2.2.0/sonar-ansible-extras-plugin-2.2.0.jar" \
     && curl -o sonar-shellcheck-plugin-2.1.0.jar -fSL "https://github.com/sbaudoin/sonar-shellcheck/releases/download/v2.1.0/sonar-shellcheck-plugin-2.1.0.jar" \
     && curl -o qualinsight-sonarqube-smell-plugin-4.0.0.jar -fSL "https://github.com/QualInsight/qualinsight-plugins-sonarqube-smell/releases/download/qualinsight-plugins-sonarqube-smell-4.0.0/qualinsight-sonarqube-smell-plugin-4.0.0.jar" \
-    && cd /opt \
-    && chown -R sonarqube:sonarqube sonarqube-${SONAR_VERSION} \
-    && rm sonarqube.zip* \
-    && rm -rf sonarqube-${SONAR_VERSION}/bin/*
+    && rm -rf "${SONAR_HOME}/bin/*" \
+    && rm /opt/sonarqube.zip*
 
-EXPOSE ${SONARQUBE_WEB_PORT}
+EXPOSE 9000
 VOLUME "${SONAR_VERSION}/data"
 WORKDIR ${SONAR_HOME}
 
 #COPY sonarqube.service /etc/systemd/system/
 COPY sonar.properties "${SONAR_HOME}/conf/"
 COPY run.sh "${SONAR_HOME}/bin/"
+
+RUN set -x \
+    && chown -R sonarqube:sonarqube "${SONAR_HOME}"
 
 #USER sonarqube
 

@@ -7,9 +7,7 @@ if [ "${1:0:1}" != '-' ]; then
 fi
 
 # Parse Docker env vars to customize SonarQube
-#
 # e.g. Setting the env var sonar.jdbc.username=foo
-#
 # will cause SonarQube to be invoked with -Dsonar.jdbc.username=foo
 
 declare -a sq_opts
@@ -23,9 +21,6 @@ done < <(env)
 
 exec java -jar lib/sonar-application-${SONARQUBE_VERSION}.jar \
   -Dsonar.log.console=true \
-  -Dsonar.jdbc.username=${SONARQUBE_JDBC_USERNAME} \
-  -Dsonar.jdbc.password=${SONARQUBE_JDBC_PASSWORD} \
-  -Dsonar.jdbc.url=${SONARQUBE_JDBC_URL} \
-  -Dsonar.web.javaAdditionalOpts=${SONARQUBE_WEB_JVM_OPTS} -Djava.security.egd=file:/dev/./urandom" \
+  -Dsonar.web.javaAdditionalOpts=${SONARQUBE_WEB_JVM_OPTS} -Djava.security.egd="file:/dev/./urandom" \
   "${sq_opts[@]}" \
   "$@"
