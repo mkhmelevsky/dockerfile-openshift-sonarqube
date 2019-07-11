@@ -71,19 +71,19 @@ RUN set -x \
     && curl -o sonar-ansible-extras-plugin-2.2.0.jar -fSL "https://github.com/sbaudoin/sonar-ansible/releases/download/v2.2.0/sonar-ansible-extras-plugin-2.2.0.jar" \
     && curl -o sonar-shellcheck-plugin-2.1.0.jar -fSL "https://github.com/sbaudoin/sonar-shellcheck/releases/download/v2.1.0/sonar-shellcheck-plugin-2.1.0.jar" \
     && curl -o qualinsight-sonarqube-smell-plugin-4.0.0.jar -fSL "https://github.com/QualInsight/qualinsight-plugins-sonarqube-smell/releases/download/qualinsight-plugins-sonarqube-smell-4.0.0/qualinsight-sonarqube-smell-plugin-4.0.0.jar" \
-    && rm -rf "${SONAR_HOME}/bin/*" \
+    && rm -rf ${SONAR_HOME}/bin/* \
     && rm /opt/sonarqube.zip*
-
-EXPOSE 9000
-VOLUME "${SONAR_VERSION}/data"
-WORKDIR ${SONAR_HOME}
 
 #COPY sonarqube.service /etc/systemd/system/
 COPY sonar.properties "${SONAR_HOME}/conf/"
 COPY run.sh "${SONAR_HOME}/bin/"
 
 RUN set -x \
-    && chown -R sonarqube:sonarqube "${SONAR_HOME}"
+    && chown -R sonarqube:sonarqube ${SONAR_HOME}
+
+EXPOSE 9000
+VOLUME ${SONAR_VERSION}/data
+WORKDIR ${SONAR_HOME}
 
 #USER sonarqube
 
