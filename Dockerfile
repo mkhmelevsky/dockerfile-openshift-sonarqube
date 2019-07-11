@@ -79,7 +79,8 @@ COPY sonar.properties "${SONAR_HOME}/conf/"
 COPY run.sh "${SONAR_HOME}/bin/"
 
 RUN set -x \
-    && chown -R sonarqube:sonarqube ${SONAR_HOME}
+    && chown -R sonarqube:sonarqube ${SONAR_HOME} \
+    && chmod +x ${SONAR_HOME}/bin/run.sh
 
 EXPOSE 9000
 VOLUME ${SONAR_VERSION}/data
