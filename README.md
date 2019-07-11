@@ -1,23 +1,26 @@
-# Образ SonarQube в контейнере OpenShift
-==========================================
+# SonarQube image intented to run as OpenShift container
 
-## Краткое описание
--------------------
+## Summary
 
     Образ SonarQube для запуска в контейнере OpenShift с БД PostgreSQL и необходимыми плагинами
 
-## Требования
--------------
+## Requrements
 
-## Структура проекта
---------------------
+## Project structure
 
-## Внешние зависимости
-----------------------
+## Dependencies
 
     В основе образа лежит OpenJDK версии 12 [https://hub.docker.com/_/openjdk]
 
     Начиная с версии 12, OpenJDK основывается на официальном образе Oracle Linux 7
 
-## Переменные
--------------
+## Variables
+
+## License
+
+    Licensed under the MIT License. See the LICENSE file for details.
+
+## Author Information
+
+    Author:
+        - Max Khmelevsky <max.khmelevsky@yandex.ru>
