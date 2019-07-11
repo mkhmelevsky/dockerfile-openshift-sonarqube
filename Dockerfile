@@ -7,25 +7,33 @@ LABEL \
     build-date="20190711"
 
 ARG SONAR_VERSION=7.8
-ARG SONARQUBE_HOME=/opt/sonarqube-${SONAR_VERSION}
+ARG SONAR_HOME=/opt/sonarqube-${SONAR_VERSION}
 ARG GOSU_VERSION=1.11
 ARG GOSU_ARCH="amd64"
+
+ARG SONARQUBE_WEB_HOST="0.0.0.0"
+ARG SONARQUBE_WEB_PORT=9000
+ARG SONARQUBE_WEB_CONTEXT="/"
+
+ARG SONARQUBE_JDBC_USERNAME="sonar"
+ARG SONARQUBE_JDBC_PASSWORD="sonar"
+ARG SONARQUBE_JDBC_URL="jdbc:postgresql://localhost:5432/sonar"
+
+ARG SONARQUBE_LOG_LEVEL="INFO"
 ARG SONARQUBE_WEB_JVM_OPTS="-Xmx512m -Xms128m"
 ARG SONARQUBE_SEARCH_JVM_OPTS="-Xms512m -Xmx512m"
 ARG SONARQUBE_CE_JVM_OPTS="-Xmx512m -Xms128m"
 
 ENV \
-    SONARQUBE_WEB_HOST="0.0.0.0" \
-    SONARQUBE_WEB_PORT=9000 \
-    SONARQUBE_WEB_CONTEXT="/" \
-    SONARQUBE_LOG_LEVEL="INFO"
+    SONARQUBE_HOME=${SONAR_HOME}
+    
 
 # Download and install common packages
 # Install gosu to switch from root
 RUN set -x \
     && groupadd -r sonarqube \
     && useradd -r -g sonarqube sonarqube \
-    && mkdir -p "${SONARQUBE_HOME}" \
+    && mkdir -p "${SONAR_HOME}" \
     && javac -version \
     && java -version \
     && yum -y update \
@@ -77,10 +85,11 @@ RUN set -x \
 
 EXPOSE ${SONARQUBE_WEB_PORT}
 VOLUME "${SONAR_VERSION}/data"
-WORKDIR ${SONARQUBE_HOME}
+WORKDIR ${SONAR_HOME}
 
 #COPY sonarqube.service /etc/systemd/system/
-#COPY run.sh /opt/sonarqube-${SONAR_VERSION}/bin/
+COPY sonar.properties "${SONAR_HOME}/conf/"
+COPY run.sh "${SONAR_HOME}/bin/"
 
 #USER sonarqube
 
