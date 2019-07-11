@@ -1,4 +1,4 @@
-# SonarQube image intented to run as OpenShift container
+# SonarQube as OpenShift container
 
 ### Summary
 
@@ -19,11 +19,15 @@
 
 ### Variables
 
+    - SONARQUBE_WEB_HOST    - адрес интерфейса для Nginx. По умолчанию: 0.0.0.0
+    - SONARQUBE_WEB_PORT    - порт SonarQube. По-умолчанию: 9000
+    - SONARQUBE_WEB_CONTEXT - контекст для Nginx. По-умолчанию: "/"
+    - SONARQUBE_LOG_LEVEL   - цровень детализаци log-файлов. По-умолчанию: "INFO"
+
 ### License
 
 Licensed under the MIT License. See the LICENSE file for details.
 
 ### Author Information
 
-Author:
-    - Max Khmelevsky <max.khmelevsky@yandex.ru>
+Max Khmelevsky <max.khmelevsky@yandex.ru>
