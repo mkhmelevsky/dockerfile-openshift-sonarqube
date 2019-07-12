@@ -1,11 +1,5 @@
 FROM openjdk:12-oracle
 
-LABEL \
-    name="SonarQube 7.8 on Oracle Linux 7 with Java JDK 1.12" \
-    vendor="Max Khmelevsky <max.khmelevsky@yandex.ru>" \
-    license="GPLv2" \
-    build-date="20190711"
-
 ARG SONAR_VERSION=7.8
 ARG SONAR_HOME=/opt/sonarqube-${SONAR_VERSION}
 ARG GOSU_VERSION=1.11
@@ -19,7 +13,13 @@ ENV \
     SONARQUBE_VERSION=${SONAR_VERSION} \
     SONARQUBE_HOME=${SONAR_HOME} \
     SONARQUBE_WEB_JVM_OPTS="-Xmx512m -Xms128m"
-    
+
+LABEL \
+    name="SonarQube ${SONAR_VERSION} on Oracle Linux 7 with Java JDK 1.12" \
+    vendor="Max Khmelevsky <max.khmelevsky@yandex.ru>" \
+    license="MIT" \
+    image-version="1.0" \
+    build-date="12.07.2019"
 
 # Download and install common packages
 # Install gosu to switch from root
@@ -50,6 +50,7 @@ RUN set -x \
 # uid                  sonarsource_deployer (Sonarsource Deployer) <infra@sonarsource.com>
 # sub   2048R/06855C1D 2015-05-25
 RUN set -x \
+    && export GNUPGHOME="$(mktemp -d)" \
     && (gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys F1182E81C792928921DBCAB4CFCA4A29D26468DE \
 	    || gpg --batch --keyserver ipv4.pool.sks-keyservers.net --recv-keys F1182E81C792928921DBCAB4CFCA4A29D26468DE) \
     && cd /opt \
@@ -71,7 +72,7 @@ RUN set -x \
     && curl -o sonar-ansible-extras-plugin-2.2.0.jar -fSL "https://github.com/sbaudoin/sonar-ansible/releases/download/v2.2.0/sonar-ansible-extras-plugin-2.2.0.jar" \
     && curl -o sonar-shellcheck-plugin-2.1.0.jar -fSL "https://github.com/sbaudoin/sonar-shellcheck/releases/download/v2.1.0/sonar-shellcheck-plugin-2.1.0.jar" \
     && curl -o qualinsight-sonarqube-smell-plugin-4.0.0.jar -fSL "https://github.com/QualInsight/qualinsight-plugins-sonarqube-smell/releases/download/qualinsight-plugins-sonarqube-smell-4.0.0/qualinsight-sonarqube-smell-plugin-4.0.0.jar" \
-    && rm -rf ${SONAR_HOME}/bin/* \
+    && rm -rf "$GNUPGHOME" ${SONAR_HOME}/bin/* \
     && rm /opt/sonarqube.zip*
 
 #COPY sonarqube.service /etc/systemd/system/
@@ -86,7 +87,7 @@ EXPOSE 9000
 VOLUME ${SONAR_VERSION}/data
 WORKDIR ${SONAR_HOME}
 
-#USER sonarqube
+USER root
 
 #ENTRYPOINT ["./bin/run.sh"]
 ENTRYPOINT ["/bin/bash"]

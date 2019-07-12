@@ -30,4 +30,4 @@ Licensed under the MIT License. See the LICENSE file for details.
 
 ### Author Information
 
-Max Khmelevsky <max dot khmelevsky at yandex dot ru>
+Max Khmelevsky max dot khmelevsky at yandex dot ru
