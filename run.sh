@@ -19,7 +19,7 @@ do
     fi
 done < <(env)
 
-gosu sonarqube java -jar lib/sonar-application-${SONARQUBE_VERSION}.jar \
+exec java -jar lib/sonar-application-${SONARQUBE_VERSION}.jar \
   -Dsonar.log.console=true \
   -Dsonar.web.javaAdditionalOpts=${SONARQUBE_WEB_JVM_OPTS} -Djava.security.egd="file:/dev/./urandom" \
   "${sq_opts[@]}" \

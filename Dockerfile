@@ -84,10 +84,11 @@ RUN set -x \
     && chmod +x ${SONAR_HOME}/bin/run.sh
 
 EXPOSE 9000
-VOLUME ${SONAR_VERSION}/data
+VOLUME ${SONAR_HOME}/data
 WORKDIR ${SONAR_HOME}
 
 USER root
+#USER sonarqube
 
 #ENTRYPOINT ["./bin/run.sh"]
 ENTRYPOINT ["/bin/bash"]
