@@ -87,8 +87,8 @@ EXPOSE 9000
 VOLUME ${SONAR_HOME}/data
 WORKDIR ${SONAR_HOME}
 
-USER root
-#USER sonarqube
+#USER root
+USER sonarqube
 
 #ENTRYPOINT ["./bin/run.sh"]
 ENTRYPOINT ["/bin/bash"]
