@@ -21,7 +21,7 @@ LABEL \
     name="SonarQube ${SONAR_VERSION} on Oracle Linux 7 with Java JDK 1.12" \
     vendor="Max Khmelevsky <max.khmelevsky@yandex.ru>" \
     license="MIT" \
-    image-version="1.1" \
+    image-version="1.2" \
     build-date="17.07.2019"
 
 # Download and install common packages
