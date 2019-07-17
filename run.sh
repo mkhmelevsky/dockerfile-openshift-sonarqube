@@ -19,8 +19,18 @@ do
     fi
 done < <(env)
 
-exec java -jar lib/sonar-application-${SONARQUBE_VERSION}.jar \
+# Start PostgreSQL server
+/usr/bin/pg_ctl start -D ${PGDATA} -s -o "-p ${PGPORT}" -w -t 300
+
+# Just wait a while
+sleep 3
+
+# Ensure that PostgreSQL has started
+/usr/bin/pg_ctl status
+
+# Start SonarQube server
+exec java -jar ${SONARQUBE_HOME}/lib/sonar-application-${SONARQUBE_VERSION}.jar \
   -Dsonar.log.console=true \
-  -Dsonar.web.javaAdditionalOpts=${SONARQUBE_WEB_JVM_OPTS} -Djava.security.egd="file:/dev/./urandom" \
+  -Dsonar.web.javaAdditionalOpts="${SONARQUBE_WEB_JVM_OPTS}" -Djava.security.egd="file:/dev/./urandom" \
   "${sq_opts[@]}" \
   "$@"
