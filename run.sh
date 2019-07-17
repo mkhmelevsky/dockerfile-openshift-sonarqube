@@ -20,7 +20,7 @@ do
 done < <(env)
 
 # Start PostgreSQL server
-/usr/bin/pg_ctl start -D ${PGDATA} -s -o "-p ${PGPORT}" -w -t 300
+/usr/bin/pg_ctl start -D ${PGDATA} -s -o "-p ${PGPORT}" -w -t 300 2>&1
 
 # Just wait a while
 sleep 3

@@ -89,14 +89,20 @@ RUN set -x \
 #COPY sonarqube.service /etc/systemd/system/
 COPY sonar.properties "${SONAR_HOME}/conf/"
 COPY run.sh "${SONAR_HOME}/bin/"
+COPY init-sonarqube-db.sh "${SONAR_HOME}/bin/"
 COPY pg_hba.conf "${PGDATA}/"
 COPY postgresql.conf "${PGDATA}/"
 
 RUN set -x \
+    && export BUILDTIME_RANDOM=$(</dev/urandom tr -dc _#[:alnum:] | head -c 32 | xargs /bin/echo) \
+    && sed -i "s/sonar.jdbc.password=sonar/sonar.jdbc.password=${BUILDTIME_RANDOM}/g" "${SONAR_HOME}/conf/sonar.properties" \
+    && echo "${BUILDTIME_RANDOM}" > "${PGDATA}/sonar.credentials" \
     && chown -R sonarqube.sonarqube "${SONAR_HOME}" \
     && chown -R sonarqube.sonarqube "${PGHOME}" \
     && chmod 600 "${PGDATA}/pg_hba.conf" "${PGDATA}/postgresql.conf" \
-    && chmod +x ${SONAR_HOME}/bin/run.sh
+    && chmod +x ${SONAR_HOME}/bin/run.sh \
+    && gosu sonarqube /bin/bash ${SONAR_HOME}/bin/init-sonarqube-db.sh \
+    && rm -rf ${SONAR_HOME}/bin/init-sonarqube-db.sh
 
 EXPOSE 9000
 
@@ -108,5 +114,5 @@ WORKDIR ${SONAR_HOME}
 #USER root
 USER sonarqube
 
-#ENTRYPOINT ["./bin/run.sh"]
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["./bin/run.sh"]
+#ENTRYPOINT ["/bin/bash"]
