@@ -21,8 +21,8 @@ LABEL \
     name="SonarQube ${SONAR_VERSION} on Oracle Linux 7 with Java JDK 1.12" \
     vendor="Max Khmelevsky <max.khmelevsky@yandex.ru>" \
     license="MIT" \
-    image-version="1.2" \
-    build-date="17.07.2019"
+    image-version="1.3" \
+    build-date="18.07.2019"
 
 # Download and install common packages
 # Install gosu to switch from root
@@ -86,7 +86,6 @@ RUN set -x \
     && rm -rf "$GNUPGHOME" ${SONAR_HOME}/bin/* \
     && rm /opt/sonarqube.zip*
 
-#COPY sonarqube.service /etc/systemd/system/
 COPY sonar.properties "${SONAR_HOME}/conf/"
 COPY run.sh "${SONAR_HOME}/bin/"
 COPY init-sonarqube-db.sh "${SONAR_HOME}/bin/"
@@ -94,9 +93,6 @@ COPY pg_hba.conf "${PGDATA}/"
 COPY postgresql.conf "${PGDATA}/"
 
 RUN set -x \
-    && export BUILDTIME_RANDOM=$(</dev/urandom tr -dc _#[:alnum:] | head -c 32 | xargs /bin/echo) \
-    && sed -i "s/sonar.jdbc.password=sonar/sonar.jdbc.password=${BUILDTIME_RANDOM}/g" "${SONAR_HOME}/conf/sonar.properties" \
-    && echo "${BUILDTIME_RANDOM}" > "${PGDATA}/sonar.credentials" \
     && chown -R sonarqube.sonarqube "${SONAR_HOME}" \
     && chown -R sonarqube.sonarqube "${PGHOME}" \
     && chmod 600 "${PGDATA}/pg_hba.conf" "${PGDATA}/postgresql.conf" \
