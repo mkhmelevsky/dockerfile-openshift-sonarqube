@@ -19,15 +19,6 @@ do
     fi
 done < <(env)
 
-# Start PostgreSQL server
-/usr/bin/pg_ctl start -D ${PGDATA} -s -o "-p ${PGPORT}" -w -t 300 2>&1
-
-# Just wait a while
-sleep 3
-
-# Ensure that PostgreSQL has started
-/usr/bin/pg_ctl status
-
 # Start SonarQube server
 exec java -jar ${SONARQUBE_HOME}/lib/sonar-application-${SONARQUBE_VERSION}.jar \
   -Dsonar.log.console=true \

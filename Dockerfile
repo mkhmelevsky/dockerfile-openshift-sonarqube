@@ -11,11 +11,7 @@ ARG SONARQUBE_CE_JVM_OPTS="-Xmx512m -Xms128m"
 
 ENV SONARQUBE_VERSION="${SONAR_VERSION}" \
     SONARQUBE_HOME="${SONAR_HOME}" \
-    SONARQUBE_WEB_JVM_OPTS="-Xmx512m -Xms128m" \
-    PGPORT="5432" \
-    PGRUN="/var/run/postgresql" \
-    PGHOME="/var/lib/pgsql" \
-    PGDATA="/var/lib/pgsql/data"
+    SONARQUBE_WEB_JVM_OPTS="-Xmx512m -Xms128m"
 
 LABEL \
     name="SonarQube ${SONAR_VERSION} on Oracle Linux 7 with Java JDK 1.12" \
@@ -26,7 +22,6 @@ LABEL \
 
 # Download and install common packages
 # Install gosu to switch from root
-# Install PostgreSQL packages and its dependencies
 RUN set -x \
     && groupadd -r sonarqube \
     && useradd -r -g sonarqube sonarqube \
@@ -34,12 +29,8 @@ RUN set -x \
     && javac -version \
     && java -version \
     && yum -y update \
-    && yum -y install acl binutils cracklib cracklib-dicts cryptsetup-libs dbus dbus-libs device-mapper device-mapper-libs dracut \
-        elfutils-default-yama-scope elfutils-libs hardlink json-c kmod kmod-libs kpartx libpwquality libsmartcols libuser libutempter lz4 \
-        pam pkgconfig postgresql postgresql-libs postgresql-server procps-ng qrencode-libs systemd systemd-libs systemd-sys systemd-sysv \
-        tzdata unzip util-linux xz \
+    && yum -y install unzip \
     && yum clean all \
-    && chown -R sonarqube.sonarqube "${PGHOME}" \
     && chown -R sonarqube.sonarqube "${PGRUN}" \
     && curl -o /usr/local/bin/gosu -fSL "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-$GOSU_ARCH" \
     && curl -o /usr/local/bin/gosu.asc -fSL "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-$GOSU_ARCH.asc" \
@@ -49,9 +40,7 @@ RUN set -x \
     && gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
     && rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu \
-    && gosu nobody true \
-    && gosu sonarqube /usr/bin/initdb \
-    && rm -rf "${PGDATA}/pg_hba.conf" "${PGDATA}/postgresql.conf"
+    && gosu nobody true
 
 # Download and unzip SonarQube and plugins
 # This plugins set is mandatory for the all E-Commerce projects
@@ -88,27 +77,19 @@ RUN set -x \
 
 COPY sonar.properties "${SONAR_HOME}/conf/"
 COPY run.sh "${SONAR_HOME}/bin/"
-COPY init-sonarqube-db.sh "${SONAR_HOME}/bin/"
-COPY pg_hba.conf "${PGDATA}/"
-COPY postgresql.conf "${PGDATA}/"
 
 RUN set -x \
     && chown -R sonarqube.sonarqube "${SONAR_HOME}" \
-    && chown -R sonarqube.sonarqube "${PGHOME}" \
-    && chmod 600 "${PGDATA}/pg_hba.conf" "${PGDATA}/postgresql.conf" \
-    && chmod +x ${SONAR_HOME}/bin/run.sh \
-    && gosu sonarqube /bin/bash ${SONAR_HOME}/bin/init-sonarqube-db.sh \
-    && rm -rf ${SONAR_HOME}/bin/init-sonarqube-db.sh
+    && chmod +x ${SONAR_HOME}/bin/run.sh
 
 EXPOSE 9000
 
 VOLUME ${SONAR_HOME}/data
-VOLUME /var/lib/pgsql/data
 
 WORKDIR ${SONAR_HOME}
 
-#USER root
-USER sonarqube
+USER root
+#USER sonarqube
 
-ENTRYPOINT ["./bin/run.sh"]
-#ENTRYPOINT ["/bin/bash"]
+#ENTRYPOINT ["./bin/run.sh"]
+ENTRYPOINT ["/bin/bash"]

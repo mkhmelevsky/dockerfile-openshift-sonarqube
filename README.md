@@ -2,7 +2,7 @@
 
 ### Summary
 
-Образ SonarQube для запуска в контейнере OpenShift с БД PostgreSQL и необходимыми плагинами
+Образ SonarQube для запуска в контейнере OpenShift с необходимыми плагинами
 
 ### Versions
 
