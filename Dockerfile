@@ -31,7 +31,6 @@ RUN set -x \
     && yum -y update \
     && yum -y install unzip \
     && yum clean all \
-    && chown -R sonarqube.sonarqube "${PGRUN}" \
     && curl -o /usr/local/bin/gosu -fSL "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-$GOSU_ARCH" \
     && curl -o /usr/local/bin/gosu.asc -fSL "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-$GOSU_ARCH.asc" \
     && export GNUPGHOME="$(mktemp -d)" \
