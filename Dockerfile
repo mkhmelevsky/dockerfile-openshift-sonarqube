@@ -17,14 +17,14 @@ LABEL \
     name="SonarQube ${SONAR_VERSION} on Oracle Linux 7 with Java JDK 1.12" \
     vendor="Max Khmelevsky <max.khmelevsky@yandex.ru>" \
     license="MIT" \
-    image-version="1.34" \
+    image-version="1.35" \
     build-date="19.07.2019"
 
 # Download and install common packages
 # Install gosu to switch from root
 RUN set -x \
-    && groupadd -r sonarqube \
-    && useradd -r -g sonarqube sonarqube \
+    && groupadd -r sonarqube --gid=999 \
+    && useradd -r -g sonarqube --uid=999 sonarqube \
     && mkdir -p "${SONARQUBE_HOME}" \
     && javac -version \
     && java -version \
@@ -78,7 +78,7 @@ COPY sonar.properties "${SONAR_HOME}/conf/"
 COPY run.sh "${SONAR_HOME}/bin/"
 
 RUN set -x \
-    && chown -R sonarqube.sonarqube "${SONAR_HOME}" \
+    && chown -R sonarqube:sonarqube "${SONAR_HOME}" \
     && chmod +x ${SONAR_HOME}/bin/run.sh
 
 EXPOSE 9000
@@ -87,8 +87,6 @@ VOLUME ${SONAR_HOME}/data
 
 WORKDIR ${SONAR_HOME}
 
-#USER root
 USER sonarqube
 
 ENTRYPOINT ["./bin/run.sh"]
-#ENTRYPOINT ["/bin/bash"]
