@@ -90,5 +90,5 @@ WORKDIR ${SONAR_HOME}
 #USER root
 USER sonarqube
 
-ENTRYPOINT ["./bin/run.sh"]
-#ENTRYPOINT ["/bin/bash"]
+#ENTRYPOINT ["./bin/run.sh"]
+ENTRYPOINT ["/bin/bash"]
