@@ -17,7 +17,7 @@ LABEL \
     name="SonarQube ${SONAR_VERSION} on Oracle Linux 7 with Java JDK 1.12" \
     vendor="Max Khmelevsky <max.khmelevsky@yandex.ru>" \
     license="MIT" \
-    image-version="1.32" \
+    image-version="1.34" \
     build-date="19.07.2019"
 
 # Download and install common packages
@@ -90,5 +90,5 @@ WORKDIR ${SONAR_HOME}
 #USER root
 USER sonarqube
 
-#ENTRYPOINT ["./bin/run.sh"]
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["./bin/run.sh"]
+#ENTRYPOINT ["/bin/bash"]
