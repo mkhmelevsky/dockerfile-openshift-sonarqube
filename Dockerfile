@@ -17,8 +17,8 @@ LABEL \
     name="SonarQube ${SONAR_VERSION} on Oracle Linux 7 with Java JDK 1.12" \
     vendor="Max Khmelevsky <max.khmelevsky@yandex.ru>" \
     license="MIT" \
-    image-version="1.3" \
-    build-date="18.07.2019"
+    image-version="1.32" \
+    build-date="19.07.2019"
 
 # Download and install common packages
 # Install gosu to switch from root
