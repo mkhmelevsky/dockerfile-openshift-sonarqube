@@ -29,7 +29,7 @@ RUN set -x \
     && javac -version \
     && java -version \
     && yum -y update \
-    && yum -y install unzip \
+    && yum -y install iproute unzip \
     && yum clean all \
     && curl -o /usr/local/bin/gosu -fSL "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-$GOSU_ARCH" \
     && curl -o /usr/local/bin/gosu.asc -fSL "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-$GOSU_ARCH.asc" \
