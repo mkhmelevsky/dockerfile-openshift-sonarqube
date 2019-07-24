@@ -68,6 +68,7 @@ RUN set -x \
 EXPOSE 9000
 
 VOLUME ${SONAR_HOME}/data
+VOLUME ${SONAR_HOME}/extensions/plugins
 
 WORKDIR ${SONAR_HOME}
 
