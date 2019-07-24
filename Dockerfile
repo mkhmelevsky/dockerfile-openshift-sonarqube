@@ -11,8 +11,8 @@ LABEL \
     name="SonarQube ${SONAR_VERSION} on Oracle Linux 7 with Java JDK 1.12" \
     vendor="Max Khmelevsky <max.khmelevsky@yandex.ru>" \
     license="MIT" \
-    image-version="1.4" \
-    build-date="22.07.2019"
+    image-version="1.5" \
+    build-date="24.07.2019"
 
 # Download and install common packages
 RUN set -x \
@@ -58,6 +58,7 @@ RUN set -x \
     && rm -rf "$GNUPGHOME" ${SONAR_HOME}/bin/* \
     && rm /opt/sonarqube.zip*
 
+COPY bitegarden-sonarqube-security-1.2.3-sq-6.7.jar "${SONAR_HOME}/extensions/plugins/"
 COPY sonar.properties "${SONAR_HOME}/conf/"
 COPY run.sh "${SONAR_HOME}/bin/"
 
@@ -68,7 +69,6 @@ RUN set -x \
 EXPOSE 9000
 
 VOLUME ${SONAR_HOME}/data
-VOLUME ${SONAR_HOME}/extensions/plugins
 
 WORKDIR ${SONAR_HOME}
 
