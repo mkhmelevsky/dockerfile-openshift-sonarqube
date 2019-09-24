@@ -8,11 +8,11 @@ ENV SONARQUBE_VERSION="${SONAR_VERSION}" \
     SONARQUBE_WEB_JVM_OPTS="-Xmx512m -Xms128m"
 
 LABEL \
-    name="SonarQube ${SONAR_VERSION} on Oracle Linux 7 with Java JDK 1.12" \
+    name="SonarQube Developer Edition ${SONAR_VERSION} on Oracle Linux 7 with Java JDK 1.12" \
     vendor="Max Khmelevsky <max.khmelevsky@yandex.ru>" \
     license="MIT" \
-    image-version="1.5" \
-    build-date="24.07.2019"
+    image-version="1.6" \
+    build-date="24.09.2019"
 
 # Download and install common packages
 RUN set -x \
@@ -37,8 +37,8 @@ RUN set -x \
     && (gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys F1182E81C792928921DBCAB4CFCA4A29D26468DE \
 	    || gpg --batch --keyserver ipv4.pool.sks-keyservers.net --recv-keys F1182E81C792928921DBCAB4CFCA4A29D26468DE) \
     && cd /opt \
-    && curl -o sonarqube.zip -fSL "https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-${SONAR_VERSION}.zip" \
-    && curl -o sonarqube.zip.asc -fSL "https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-${SONAR_VERSION}.zip.asc" \
+    && curl -o sonarqube.zip -fSL "https://binaries.sonarsource.com/CommercialDistribution/sonarqube-developer/sonarqube-developer-${SONAR_VERSION}.zip" \
+    && curl -o sonarqube.zip.asc -fSL "https://binaries.sonarsource.com/CommercialDistribution/sonarqube-developer/sonarqube-developer-${SONAR_VERSION}.zip.asc" \
     && gpg --batch --verify sonarqube.zip.asc sonarqube.zip \
     && unzip sonarqube.zip \
     && ln -s sonarqube-${SONAR_VERSION} sonarqube \

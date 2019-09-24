@@ -2,12 +2,12 @@
 
 ### Summary
 
-Образ SonarQube для запуска в контейнере OpenShift с необходимыми плагинами
+Образ SonarQube Developer Edition для запуска в контейнере OpenShift с необходимыми плагинами
 
 ### Versions
 
     - RedHat OpenShift 3.11
-    - SonarQube 7.8
+    - SonarQube Developer Edition 7.8
 
 ### Plug-ins
 
